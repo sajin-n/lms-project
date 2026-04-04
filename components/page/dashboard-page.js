@@ -1,76 +1,129 @@
-import MainLayout from "../layout/main-layout";
-import Card from "../global/card";
+"use client"
+import React, { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import toast from 'react-hot-toast';
+import MainLayout from '../layout/main-layout';
+import Sidebar from '../layout/sidebar';
+import Navbar from '../layout/navbar';
+import Card from '../global/card';
 
-export default function DashboardPage() {
+const DashboardPage = () => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchDashboard = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/dashboard/admin', { cache: 'no-store' });
+      const payload = await response.json();
+
+      if (!response.ok) {
+        throw new Error(payload?.error || 'Failed to load admin dashboard');
+      }
+
+      setData(payload);
+    } catch (error) {
+      toast.error(error.message || 'Failed to load dashboard');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboard();
+  }, []);
+
+  const statCards = useMemo(() => {
+    const stats = data?.stats;
+    if (!stats) return [];
+
+    return [
+      { label: 'Total Users', value: stats.usersCount },
+      { label: 'Students', value: stats.studentsCount },
+      { label: 'Admins', value: stats.adminsCount },
+      { label: 'Courses', value: stats.coursesCount },
+      { label: 'Enrollments', value: stats.enrollmentsCount },
+      { label: 'Completion Rate', value: `${stats.completionRate}%` },
+    ];
+  }, [data]);
+
   return (
-    <MainLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-        <p className="text-gray-500 mt-2">Welcome back! Here&#39;s your learning overview</p>
+    <MainLayout sidebar={<Sidebar role="admin" />} navbar={<Navbar />}>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-black">Admin Dashboard</h1>
+        <button
+          onClick={fetchDashboard}
+          className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          Refresh
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-blue-600">Course Progress</h2>
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-            </div>
+      {isLoading ? (
+        <p className="text-gray-600">Loading dashboard...</p>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            {statCards.map((item) => (
+              <Card key={item.label}>
+                <p className="text-sm text-gray-500">{item.label}</p>
+                <p className="text-2xl font-bold text-gray-900 mt-2">{item.value}</p>
+              </Card>
+            ))}
           </div>
-          <p className="text-gray-600 text-sm mb-4">Track your learning journey</p>
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-700">React Fundamentals</span>
-              <span className="font-semibold text-blue-600">75%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div className="bg-linear-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-300" style={{width: '75%'}}></div>
-            </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <Card>
+              <h2 className="text-xl font-semibold text-black mb-3">Recent Users</h2>
+              <ul className="space-y-2">
+                {data?.recentUsers?.length ? (
+                  data.recentUsers.map((user) => (
+                    <li key={user._id} className="text-sm text-gray-700">
+                      <span className="font-medium">{user.name}</span> · {user.email} ·{' '}
+                      <span className="uppercase text-xs">{user.role}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-sm text-gray-500">No users yet.</li>
+                )}
+              </ul>
+            </Card>
+
+            <Card>
+              <h2 className="text-xl font-semibold text-black mb-3">Recent Courses</h2>
+              <ul className="space-y-2">
+                {data?.recentCourses?.length ? (
+                  data.recentCourses.map((course) => (
+                    <li key={course._id} className="text-sm text-gray-700">
+                      <span className="font-medium">{course.title}</span> · {course.level} ·{' '}
+                      {course.durationWeeks} weeks
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-sm text-gray-500">No courses yet.</li>
+                )}
+              </ul>
+            </Card>
           </div>
-        </Card>
-        
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-green-600">Upcoming Lessons</h2>
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
+
+          <div className="flex gap-3 flex-wrap">
+            <Link
+              href="/edit_lesson"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Add/Edit Lessons
+            </Link>
+            <Link
+              href="/manage_students"
+              className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition-colors"
+            >
+              Manage Students
+            </Link>
           </div>
-          <p className="text-gray-600 text-sm mb-4">Next sessions scheduled</p>
-          <ul className="space-y-3">
-            <li className="flex items-start p-2 rounded-lg hover:bg-gray-50 transition-colors">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-3 mt-1.5 shrink-0"></span>
-              <span className="text-sm text-gray-700">Advanced JavaScript - Today 3:00 PM</span>
-            </li>
-            <li className="flex items-start p-2 rounded-lg hover:bg-gray-50 transition-colors">
-              <span className="w-2 h-2 bg-yellow-500 rounded-full mr-3 mt-1.5 shrink-0"></span>
-              <span className="text-sm text-gray-700">Node.js Basics - Tomorrow 10:00 AM</span>
-            </li>
-          </ul>
-        </Card>
-        
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-purple-600">Assignments</h2>
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-          </div>
-          <p className="text-gray-600 text-sm mb-4">Pending submissions</p>
-          <div className="text-center py-4">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-purple-100 rounded-full mb-2">
-              <div className="text-4xl font-bold text-purple-600">3</div>
-            </div>
-            <div className="text-sm text-gray-500">Due this week</div>
-          </div>
-        </Card>
-      </div>
+        </>
+      )}
     </MainLayout>
   );
-}
+};
+
+export default DashboardPage;
