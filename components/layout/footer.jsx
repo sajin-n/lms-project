@@ -1,16 +1,10 @@
-import Link from 'next/link';
+"use client"
+import React from 'react';
 
-export default function Footer() {
-  return (
-    <footer className="w-full bg-gray-800 text-white p-6 mt-auto">
-      <div className="container mx-auto text-center">
-        <p className="text-sm">© 2025 LMS Project. All rights reserved.</p>
-        <div className="mt-2 space-x-4">
-          <Link href="#" className="hover:text-gray-300 transition">About</Link>
-          <Link href="#" className="hover:text-gray-300 transition">Contact</Link>
-          <Link href="#" className="hover:text-gray-300 transition">Privacy Policy</Link>
-        </div>
-      </div>
-    </footer>
-  );
-}
+const Footer = () => (
+  <footer className="w-full bg-gray-200 text-gray-700 text-center py-3 mt-auto">
+    &copy; {new Date().getFullYear()} LMS. All rights reserved.
+  </footer>
+);
+
+export default Footer;
