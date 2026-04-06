@@ -7,11 +7,13 @@ import MainLayout from '../layout/main-layout';
 import Sidebar from '../layout/sidebar';
 import Navbar from '../layout/navbar';
 import Card from '../global/card';
+import SessionExpiredModal from '../global/session-expired-modal';
 
 const StudentDashboardPage = () => {
   const { data: session } = useSession();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showExpiredModal, setShowExpiredModal] = useState(false);
 
   const fetchDashboard = async () => {
     setIsLoading(true);
@@ -20,6 +22,10 @@ const StudentDashboardPage = () => {
       const payload = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          setShowExpiredModal(true);
+          return;
+        }
         throw new Error(payload?.error || 'Failed to load student dashboard');
       }
 
@@ -35,6 +41,12 @@ const StudentDashboardPage = () => {
     fetchDashboard();
   }, []);
 
+  useEffect(() => {
+    if (!session) {
+      setShowExpiredModal(true);
+    }
+  }, [session]);
+
   const cards = useMemo(() => {
     const stats = data?.stats;
     if (!stats) return [];
@@ -49,6 +61,7 @@ const StudentDashboardPage = () => {
 
   return (
     <MainLayout sidebar={<Sidebar role="student" />} navbar={<Navbar />}>
+      <SessionExpiredModal isOpen={showExpiredModal} />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-black">
           Welcome, {session?.user?.name || 'Student'}
