@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import MainLayout from '../layout/main-layout';
 import Sidebar from '../layout/sidebar';
@@ -7,6 +8,7 @@ import Navbar from '../layout/navbar';
 import Card from '../global/card';
 import InputField from '../global/input-field';
 import Button from '../global/button';
+import SessionExpiredModal from '../global/session-expired-modal';
 
 const initialForm = {
   title: '',
@@ -16,12 +18,14 @@ const initialForm = {
 };
 
 export default function EditLessonsPage() {
+  const { data: session } = useSession();
   const [form, setForm] = useState(initialForm);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [editingCourseId, setEditingCourseId] = useState(null);
   const [deletingCourseId, setDeletingCourseId] = useState(null);
+  const [showExpiredModal, setShowExpiredModal] = useState(false);
 
   const fetchCourses = async () => {
     setIsLoading(true);
@@ -30,6 +34,10 @@ export default function EditLessonsPage() {
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          setShowExpiredModal(true);
+          return;
+        }
         throw new Error(data?.error || 'Failed to load courses');
       }
 
@@ -44,6 +52,12 @@ export default function EditLessonsPage() {
   useEffect(() => {
     fetchCourses();
   }, []);
+
+  useEffect(() => {
+    if (!session) {
+      setShowExpiredModal(true);
+    }
+  }, [session]);
 
   const handleSaveCourse = async (event) => {
     event.preventDefault();
@@ -139,6 +153,7 @@ export default function EditLessonsPage() {
 
   return (
     <MainLayout sidebar={<Sidebar role="admin" />} navbar={<Navbar />}>
+      <SessionExpiredModal isOpen={showExpiredModal} />
       <h1 className="text-3xl font-bold text-black mb-6">Edit Lessons</h1>
 
       <Card className="mb-6">
