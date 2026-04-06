@@ -1,7 +1,7 @@
 "use client"
 
 const MainLayout = ({ children, sidebar, navbar, footer }) => (
-  <div className="flex flex-col min-h-screen bg-gray-50">
+  <div className="flex flex-col min-h-screen bg-white">
     <header>
       {navbar}
     </header>
@@ -9,7 +9,7 @@ const MainLayout = ({ children, sidebar, navbar, footer }) => (
       <aside>
         {sidebar}
       </aside>
-      <main className="flex-1 p-4 md:p-6 max-w-5xl mx-auto w-full">
+      <main className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full">
         {children}
       </main>
     </div>
