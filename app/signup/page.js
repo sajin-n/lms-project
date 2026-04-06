@@ -167,7 +167,7 @@ const SignupPage = () => {
                   type="password"
                   value={form.password}
                   onChange={handleChange}
-                  placeholder="Enter your password (min 6 characters)"
+                  placeholder="Enter your password (min 8 characters)"
                   disabled={isLoading}
                   required
                 />
