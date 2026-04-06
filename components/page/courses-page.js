@@ -1,14 +1,18 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import MainLayout from '../layout/main-layout';
 import Sidebar from '../layout/sidebar';
 import Navbar from '../layout/navbar';
 import Card from '../global/card';
+import SessionExpiredModal from '../global/session-expired-modal';
 
 export default function CoursesPage() {
+  const { data: session } = useSession();
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showExpiredModal, setShowExpiredModal] = useState(false);
 
   const fetchCourses = async () => {
     setIsLoading(true);
@@ -17,6 +21,10 @@ export default function CoursesPage() {
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          setShowExpiredModal(true);
+          return;
+        }
         throw new Error(data?.error || 'Failed to fetch courses');
       }
 
@@ -31,6 +39,12 @@ export default function CoursesPage() {
   useEffect(() => {
     fetchCourses();
   }, []);
+
+  useEffect(() => {
+    if (!session) {
+      setShowExpiredModal(true);
+    }
+  }, [session]);
 
   const handleEnroll = async (courseId) => {
     const loadingToast = toast.loading('Enrolling...');
@@ -83,6 +97,7 @@ export default function CoursesPage() {
 
   return (
     <MainLayout sidebar={<Sidebar role="student" />} navbar={<Navbar />}>
+      <SessionExpiredModal isOpen={showExpiredModal} />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-black">My Courses</h1>
         <button
