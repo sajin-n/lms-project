@@ -49,7 +49,7 @@ export async function POST(request) {
     }
 
     if (session.user.role !== 'student') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return NextResponse.json({ error: 'Only students can enroll in courses' }, { status: 403 });
     }
 
     const body = await request.json();
