@@ -124,119 +124,162 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-white nb-grid-bg">
       <Navbar />
-      <div className="flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md">
-          {/* Card Container */}
-          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            {/* Header Section */}
-            <div className="bg-linear-to-r from-blue-600 to-indigo-600 px-8 py-6">
-              <h2 className="text-3xl font-bold text-white text-center">Sign Up</h2>
-              <p className="text-blue-100 text-center mt-2 text-sm">Create your account to get started</p>
+      <div className="flex items-center justify-center px-4 py-16 md:py-24">
+        <div className="w-full max-w-lg">
+          {/* Main Card Container - Neo Brutalism */}
+          <div className="border-[4px] border-black bg-white shadow-[12px_12px_0px] shadow-black p-0">
+            {/* Header Section - Bold Contrast */}
+            <div className="bg-[#00FFD1] text-black border-b-[4px] border-black px-8 py-12">
+              <h1 className="nb-heading text-4xl md:text-5xl mb-2">CREATE</h1>
+              <h2 className="nb-heading text-4xl md:text-5xl mb-4">ACCOUNT</h2>
+              <div className="w-full h-1 bg-black mb-4"></div>
+              <p className="text-lg font-bold uppercase tracking-wider">JOIN THE PLATFORM</p>
             </div>
             
             {/* Form Section */}
-            <div className="px-8 py-8">
+            <div className="px-8 md:px-12 py-12">
               <form onSubmit={handleSubmit} className="space-y-6">
-                <InputField
-                  label="Full Name"
-                  name="name"
-                  type="text"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Enter your full name"
-                  disabled={isLoading}
-                  required
-                />
+                {/* Full Name Field */}
+                <div>
+                  <label className="block text-black font-black text-lg uppercase tracking-wide mb-2">
+                    YOUR NAME
+                  </label>
+                  <input
+                    name="name"
+                    type="text"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="FULL NAME"
+                    disabled={isLoading}
+                    className="nb-input"
+                    required
+                  />
+                </div>
                 
-                <InputField
-                  label="Email"
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                  disabled={isLoading}
-                  required
-                />
+                {/* Email Field */}
+                <div>
+                  <label className="block text-black font-black text-lg uppercase tracking-wide mb-2">
+                    EMAIL ADDRESS
+                  </label>
+                  <input
+                    name="email"
+                    type="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="YOUR@EMAIL.COM"
+                    disabled={isLoading}
+                    className="nb-input"
+                    required
+                  />
+                </div>
                 
-                <InputField
-                  label="Password"
-                  name="password"
-                  type="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password (min 8 characters)"
-                  disabled={isLoading}
-                  required
-                />
+                {/* Password Field */}
+                <div>
+                  <label className="block text-black font-black text-lg uppercase tracking-wide mb-2">
+                    PASSWORD
+                  </label>
+                  <input
+                    name="password"
+                    type="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="MIN 8 CHARS + NUMBER"
+                    disabled={isLoading}
+                    className="nb-input"
+                    required
+                  />
+                </div>
 
-                <InputField
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  type="password"
-                  value={form.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Re-enter your password"
-                  disabled={isLoading}
-                  required
-                />
+                {/* Confirm Password Field */}
+                <div>
+                  <label className="block text-black font-black text-lg uppercase tracking-wide mb-2">
+                    CONFIRM PASSWORD
+                  </label>
+                  <input
+                    name="confirmPassword"
+                    type="password"
+                    value={form.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="•••••••••"
+                    disabled={isLoading}
+                    className="nb-input"
+                    required
+                  />
+                </div>
                 
-                <div className="mb-4">
-                  <label htmlFor="role" className="block text-sm text-gray-700 font-semibold mb-2">
-                    Role
+                {/* Role Selection */}
+                <div>
+                  <label className="block text-black font-black text-lg uppercase tracking-wide mb-2">
+                    SELECT ROLE
                   </label>
                   <select
-                    id="role"
                     name="role"
                     value={form.role}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 text-gray-900 bg-gray-50 border-2 border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 hover:border-gray-400 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="nb-input cursor-pointer appearance-none bg-white"
                     disabled={isLoading}
                     required
                   >
-                    <option value="student">Student</option>
-                    <option value="admin">Admin</option>
+                    <option value="student" className="bg-white text-black">STUDENT</option>
+                    <option value="admin" className="bg-white text-black">ADMIN</option>
                   </select>
                 </div>
 
+                {/* Admin Invite Code - Conditional */}
                 {form.role === 'admin' && (
-                  <InputField
-                    label="Admin Invite Code"
-                    name="adminInviteCode"
-                    type="password"
-                    value={form.adminInviteCode}
-                    onChange={handleChange}
-                    placeholder="Enter admin invite code"
-                    disabled={isLoading}
-                    required
-                  />
+                  <div className="border-[3px] border-[#FF0080] bg-[#FFE6F0] p-4 mb-4">
+                    <label className="block text-black font-black text-lg uppercase tracking-wide mb-2">
+                      🔐 ADMIN CODE
+                    </label>
+                    <input
+                      name="adminInviteCode"
+                      type="password"
+                      value={form.adminInviteCode}
+                      onChange={handleChange}
+                      placeholder="ENTER ADMIN KEY"
+                      disabled={isLoading}
+                      className="nb-input"
+                      required
+                    />
+                  </div>
                 )}
                 
-                <Button type="submit" disabled={isLoading}>
+                {/* Sign Up Button */}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full px-8 py-4 bg-[#00FFD1] text-black font-black text-lg border-[4px] border-black uppercase tracking-wider shadow-[8px_8px_0px] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all duration-100 disabled:opacity-50 mt-8"
+                >
                   {isLoading ? (
-                    <span className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <span className="flex items-center justify-center gap-3">
+                      <svg className="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Creating Account...
+                      CREATING
                     </span>
-                  ) : 'Sign Up'}
-                </Button>
+                  ) : 'CREATE ACCOUNT'}
+                </button>
                 
+                {/* Divider */}
+                <div className="relative">
+                  <div className="border-t-[3px] border-black"></div>
+                </div>
+                
+                {/* Sign In Link */}
                 <div className="text-center">
-                  <p className="text-sm text-gray-600">
-                    Already have an account?{' '}
-                    <button
-                      type="button"
-                      onClick={() => router.push('/signin')}
-                      className="text-blue-600 hover:text-blue-800 font-semibold hover:underline transition-all"
-                    >
-                      Sign In
-                    </button>
+                  <p className="text-sm font-bold uppercase tracking-wider mb-4">
+                    ALREADY A MEMBER?
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => router.push('/signin')}
+                    className="w-full px-6 py-3 bg-black text-white font-black text-base border-[3px] border-black uppercase tracking-wide shadow-[6px_6px_0px] shadow-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px] active:translate-x-[4px] active:translate-y-[4px] transition-all duration-100"
+                  >
+                    SIGN IN
+                  </button>
                 </div>
               </form>
             </div>
