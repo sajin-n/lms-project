@@ -1,1 +1,67 @@
 @import "tailwindcss";
+
+:root {
+  --nb-primary: #FF6B6B;
+  --nb-secondary: #4ECDC4;
+  --nb-accent: #FFE66D;
+  --nb-dark: #1A1A2E;
+  --nb-light: #F7FFF7;
+  --nb-purple: #6C5CE7;
+  --nb-orange: #FF9F43;
+  --nb-pink: #FD79A8;
+  --nb-border-width: 3px;
+  --nb-shadow: 4px 4px 0px;
+  --nb-shadow-lg: 6px 6px 0px;
+  --nb-radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--nb-light);
+  color: var(--nb-dark);
+  line-height: 1.6;
+}
+
+@layer utilities {
+  .nb-btn-primary {
+    @apply px-6 py-3 bg-[var(--nb-primary)] text-white font-bold text-base border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px] hover:shadow-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150;
+  }
+
+  .nb-btn-secondary {
+    @apply px-6 py-3 bg-[var(--nb-secondary)] text-white font-bold text-base border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px] hover:shadow-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150;
+  }
+
+  .nb-btn-accent {
+    @apply px-6 py-3 bg-[var(--nb-accent)] text-black font-bold text-base border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px] hover:shadow-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150;
+  }
+
+  .nb-card {
+    @apply bg-white border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] shadow-[var(--nb-shadow)] shadow-black p-6;
+  }
+
+  .nb-input {
+    @apply w-full px-4 py-3 text-black bg-white border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] font-medium placeholder:text-gray-500 focus:outline-none focus:ring-4 focus:ring-[var(--nb-secondary)] focus:border-black transition-all duration-150;
+  }
+
+  .nb-heading {
+    @apply text-3xl md:text-4xl font-black text-black tracking-tight;
+  }
+
+  .nb-subheading {
+    @apply text-xl md:text-2xl font-bold text-black;
+  }
+
+  .nb-bg-pattern {
+    background-image: 
+      linear-gradient(45deg, var(--nb-secondary) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--nb-secondary) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--nb-secondary) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--nb-secondary) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+}
