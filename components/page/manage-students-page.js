@@ -1,16 +1,20 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import MainLayout from '../layout/main-layout';
 import Sidebar from '../layout/sidebar';
 import Navbar from '../layout/navbar';
 import Card from '../global/card';
+import SessionExpiredModal from '../global/session-expired-modal';
 
 export default function ManageStudentsPage() {
+  const { data: session } = useSession();
   const [users, setUsers] = useState([]);
   const [summary, setSummary] = useState({ total: 0, students: 0, admins: 0 });
   const [isLoading, setIsLoading] = useState(true);
   const [deletingUserId, setDeletingUserId] = useState(null);
+  const [showExpiredModal, setShowExpiredModal] = useState(false);
 
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -19,6 +23,10 @@ export default function ManageStudentsPage() {
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          setShowExpiredModal(true);
+          return;
+        }
         throw new Error(data?.error || 'Failed to fetch users');
       }
 
@@ -34,6 +42,12 @@ export default function ManageStudentsPage() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (!session) {
+      setShowExpiredModal(true);
+    }
+  }, [session]);
 
   const handleDeleteStudent = async (user) => {
     if (user.role !== 'student') {
@@ -76,6 +90,7 @@ export default function ManageStudentsPage() {
 
   return (
     <MainLayout sidebar={<Sidebar role="admin" />} navbar={<Navbar />}>
+      <SessionExpiredModal isOpen={showExpiredModal} />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-black">Manage Students</h1>
         <button
