@@ -154,79 +154,86 @@ export default function EditLessonsPage() {
   return (
     <MainLayout sidebar={<Sidebar role="admin" />} navbar={<Navbar />}>
       <SessionExpiredModal isOpen={showExpiredModal} />
-      <h1 className="text-3xl font-bold text-black mb-6">Edit Lessons</h1>
+      
+      {/* Header Section */}
+      <div className="mb-12 border-[4px] border-black bg-[#00FFD1] text-black p-12">
+        <h1 className="nb-heading text-5xl md:text-6xl mb-4">MANAGE</h1>
+        <p className="text-2xl md:text-3xl font-bold uppercase tracking-wider">LESSONS</p>
+      </div>
 
-      <Card className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-black">
-            {editingCourseId ? 'Edit Lesson' : 'Create New Lesson'}
+      {/* Form Section */}
+      <div className="border-[4px] border-black bg-white shadow-[8px_8px_0px] shadow-black mb-12 p-8">
+        <div className="flex items-center justify-between mb-8 pb-8 border-b-[4px] border-black">
+          <h2 className="nb-subheading text-3xl md:text-4xl">
+            {editingCourseId ? '✏️ EDIT LESSON' : '➕ CREATE NEW'}
           </h2>
           {editingCourseId && (
             <button
               type="button"
               onClick={handleCancelEdit}
-              className="text-sm text-gray-600 hover:text-gray-800"
+              className="px-6 py-3 bg-gray-300 text-black font-black border-[3px] border-black uppercase tracking-wide shadow-[4px_4px_0px] hover:shadow-none transition-all duration-100"
             >
-              Cancel edit
+              CANCEL
             </button>
           )}
         </div>
 
-        <form onSubmit={handleSaveCourse} className="space-y-4">
-          <InputField
-            label="Course Title"
-            name="title"
-            value={form.title}
-            onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
-            placeholder="e.g. JavaScript Foundations"
-            disabled={isSaving}
-          />
+        <form onSubmit={handleSaveCourse} className="space-y-6">
+          <div>
+            <label className="block text-black font-black text-lg uppercase tracking-wide mb-3">
+              LESSON TITLE
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
+              placeholder="E.G. JAVASCRIPT FOUNDATIONS"
+              disabled={isSaving}
+              className="nb-input"
+              required
+            />
+          </div>
 
           <div>
-            <label className="block text-sm text-gray-700 font-semibold mb-2" htmlFor="description">
-              Description
+            <label className="block text-black font-black text-lg uppercase tracking-wide mb-3">
+              DESCRIPTION
             </label>
             <textarea
-              id="description"
               value={form.description}
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, description: event.target.value }))
               }
-              placeholder="Describe what students will learn"
-              rows={4}
-              className="w-full px-4 py-3 text-gray-900 bg-gray-50 border-2 border-gray-300 rounded-lg"
+              placeholder="DESCRIBE WHAT STUDENTS WILL LEARN"
+              rows={5}
+              className="w-full px-6 py-4 text-black bg-white border-[4px] border-black font-semibold focus:outline-none focus:border-[#FF0080] transition-all uppercase tracking-wide disabled:opacity-50"
               disabled={isSaving}
               required
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm text-gray-700 font-semibold mb-2" htmlFor="level">
-                Level
+              <label className="block text-black font-black text-lg uppercase tracking-wide mb-3">
+                LEVEL
               </label>
               <select
-                id="level"
                 value={form.level}
                 onChange={(event) => setForm((prev) => ({ ...prev, level: event.target.value }))}
-                className="w-full px-4 py-3 text-gray-900 bg-gray-50 border-2 border-gray-300 rounded-lg"
+                className="nb-input w-full cursor-pointer appearance-none"
                 disabled={isSaving}
               >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
+                <option>BEGINNER</option>
+                <option>INTERMEDIATE</option>
+                <option>ADVANCED</option>
               </select>
             </div>
 
             <div>
-              <label
-                className="block text-sm text-gray-700 font-semibold mb-2"
-                htmlFor="durationWeeks"
-              >
-                Duration (weeks)
+              <label className="block text-black font-black text-lg uppercase tracking-wide mb-3">
+                DURATION (WEEKS)
               </label>
               <input
-                id="durationWeeks"
                 type="number"
                 min={1}
                 max={52}
@@ -234,69 +241,92 @@ export default function EditLessonsPage() {
                 onChange={(event) =>
                   setForm((prev) => ({ ...prev, durationWeeks: Number(event.target.value) }))
                 }
-                className="w-full px-4 py-3 text-gray-900 bg-gray-50 border-2 border-gray-300 rounded-lg"
+                className="nb-input"
                 disabled={isSaving}
                 required
               />
             </div>
           </div>
 
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? 'Saving...' : editingCourseId ? 'Update Lesson' : 'Create Lesson'}
-          </Button>
+          <button 
+            type="submit" 
+            disabled={isSaving}
+            className="w-full px-8 py-4 bg-[#A000FF] text-white font-black text-lg border-[4px] border-black uppercase tracking-wider shadow-[8px_8px_0px] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all duration-100 disabled:opacity-50"
+          >
+            {isSaving ? '⏳ SAVING...' : editingCourseId ? '✏️ UPDATE LESSON' : '➕ CREATE LESSON'}
+          </button>
         </form>
-      </Card>
+      </div>
 
-      <Card>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-black">Existing Courses</h2>
+      {/* Existing Courses Section */}
+      <div className="border-[4px] border-black bg-white shadow-[8px_8px_0px] shadow-black p-8">
+        <div className="flex items-center justify-between mb-8 pb-8 border-b-[4px] border-black">
+          <h2 className="nb-subheading text-3xl md:text-4xl">EXISTING LESSONS</h2>
           <button
             onClick={fetchCourses}
-            className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            className="px-6 py-3 bg-black text-white font-black border-[3px] border-black uppercase tracking-wide shadow-[6px_6px_0px] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px] active:shadow-none transition-all duration-100"
           >
-            Refresh
+            ⚡ REFRESH
           </button>
         </div>
 
         {isLoading ? (
-          <p className="text-gray-600">Loading courses...</p>
+          <div className="flex items-center justify-center h-32">
+            <svg className="animate-spin h-10 w-10 text-black" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
         ) : courses.length === 0 ? (
-          <p className="text-gray-600">No courses created yet.</p>
+          <div className="border-[3px] border-dashed border-gray-300 p-8 text-center">
+            <p className="font-black text-lg uppercase tracking-wider text-gray-500">NO LESSONS YET</p>
+            <p className="text-sm text-gray-400 mt-2">Create your first lesson above</p>
+          </div>
         ) : (
-          <ul className="space-y-3">
+          <div className="space-y-4">
             {courses.map((course) => (
-              <li key={course._id} className="border border-gray-200 rounded-md p-3">
-                <p className="font-semibold text-gray-900">{course.title}</p>
-                <p className="text-sm text-gray-700 mt-1">{course.description}</p>
-                <div className="flex items-center justify-between mt-2 gap-3 flex-wrap">
-                  <p className="text-xs text-gray-500">
-                    {course.level} · {course.durationWeeks} weeks
-                  </p>
+              <div key={course._id} className="border-l-[4px] border-[#00FFD1] bg-gray-50 hover:bg-white transition-colors p-6">
+                <div className="mb-4">
+                  <h3 className="font-black text-xl uppercase tracking-wide text-black mb-2">
+                    {course.title}
+                  </h3>
+                  <p className="text-sm font-medium text-gray-700">{course.description}</p>
+                </div>
 
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex gap-3">
+                    <span className="px-4 py-2 bg-[#FFFF00] text-black font-black text-xs uppercase border-[2px] border-black">
+                      {course.level?.toUpperCase() || 'BEGINNER'}
+                    </span>
+                    <span className="px-4 py-2 bg-[#FF0080] text-white font-black text-xs uppercase border-[2px] border-black">
+                      {course.durationWeeks} WEEKS
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
                     <button
                       type="button"
                       onClick={() => handleEditCourse(course)}
-                      className="text-xs bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700"
+                      className="px-6 py-2 bg-[#00FFD1] text-black font-black border-[3px] border-black uppercase tracking-wide text-xs shadow-[4px_4px_0px] hover:translate-x-[2px] hover:translate-y-[2px] disabled:opacity-50 transition-all duration-100"
                       disabled={isSaving || deletingCourseId === course._id}
                     >
-                      Edit
+                      ✏️ EDIT
                     </button>
                     <button
                       type="button"
                       onClick={() => handleDeleteCourse(course)}
-                      className="text-xs bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 disabled:opacity-60"
+                      className="px-6 py-2 bg-[#FF0080] text-white font-black border-[3px] border-black uppercase tracking-wide text-xs shadow-[4px_4px_0px] hover:translate-x-[2px] hover:translate-y-[2px] disabled:opacity-50 transition-all duration-100"
                       disabled={deletingCourseId === course._id}
                     >
-                      {deletingCourseId === course._id ? 'Deleting...' : 'Delete'}
+                      {deletingCourseId === course._id ? '⏳ DELETING...' : '🗑️ DELETE'}
                     </button>
                   </div>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
-      </Card>
+      </div>
     </MainLayout>
   );
 }
