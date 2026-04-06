@@ -91,79 +91,100 @@ export default function ManageStudentsPage() {
   return (
     <MainLayout sidebar={<Sidebar role="admin" />} navbar={<Navbar />}>
       <SessionExpiredModal isOpen={showExpiredModal} />
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-black">Manage Students</h1>
-        <button
-          onClick={fetchUsers}
-          className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-        >
-          Refresh
-        </button>
+      
+      {/* Header Section */}
+      <div className="mb-12 border-[4px] border-black bg-[#FF0080] text-white p-12">
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="nb-heading-light text-5xl md:text-6xl mb-2">MANAGE</h1>
+            <p className="text-2xl md:text-3xl font-bold uppercase tracking-wider">STUDENTS</p>
+          </div>
+          <button
+            onClick={fetchUsers}
+            className="px-6 py-3 bg-white text-[#FF0080] font-black border-[3px] border-white uppercase tracking-wide shadow-[6px_6px_0px] shadow-white hover:translate-x-[3px] hover:translate-y-[3px] active:shadow-none transition-all duration-100"
+          >
+            ⚡ REFRESH
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card>
-          <p className="text-sm text-gray-500">Total Users</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{summary.total}</p>
-        </Card>
-        <Card>
-          <p className="text-sm text-gray-500">Students</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{summary.students}</p>
-        </Card>
-        <Card>
-          <p className="text-sm text-gray-500">Admins</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{summary.admins}</p>
-        </Card>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="border-[4px] border-black bg-[#00FFD1] text-black p-8 shadow-[8px_8px_0px] shadow-black">
+          <p className="font-black text-sm uppercase tracking-widest mb-3 text-gray-700">TOTAL USERS</p>
+          <p className="text-6xl font-black">{summary.total}</p>
+        </div>
+        <div className="border-[4px] border-black bg-[#FFFF00] text-black p-8 shadow-[8px_8px_0px] shadow-black">
+          <p className="font-black text-sm uppercase tracking-widest mb-3 text-gray-700">STUDENTS</p>
+          <p className="text-6xl font-black">{summary.students}</p>
+        </div>
+        <div className="border-[4px] border-black bg-[#A000FF] text-white p-8 shadow-[8px_8px_0px] shadow-black">
+          <p className="font-black text-sm uppercase tracking-widest mb-3 text-gray-100">ADMINS</p>
+          <p className="text-6xl font-black">{summary.admins}</p>
+        </div>
       </div>
 
-      <Card>
+      {/* Users Table Section */}
+      <div className="border-[4px] border-black bg-white shadow-[8px_8px_0px] shadow-black p-8">
+        <h2 className="nb-subheading text-3xl md:text-4xl mb-8">ALL USERS</h2>
+        
         {isLoading ? (
-          <p className="text-gray-600">Loading users...</p>
+          <div className="flex items-center justify-center h-32">
+            <svg className="animate-spin h-10 w-10 text-black" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
         ) : users.length === 0 ? (
-          <p className="text-gray-600">No users found.</p>
+          <div className="border-[3px] border-dashed border-gray-300 p-8 text-center">
+            <p className="font-black text-lg uppercase tracking-wider text-gray-500">NO USERS FOUND</p>
+          </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200 text-left">
-                  <th className="py-2 pr-4 text-gray-600">Name</th>
-                  <th className="py-2 pr-4 text-gray-600">Email</th>
-                  <th className="py-2 pr-4 text-gray-600">Role</th>
-                  <th className="py-2 pr-4 text-gray-600">Joined</th>
-                  <th className="py-2 pr-4 text-gray-600">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user._id} className="border-b border-gray-100">
-                    <td className="py-2 pr-4 text-gray-900">{user.name}</td>
-                    <td className="py-2 pr-4 text-gray-700">{user.email}</td>
-                    <td className="py-2 pr-4">
-                      <span className="uppercase text-xs font-semibold text-gray-700">{user.role}</span>
-                    </td>
-                    <td className="py-2 pr-4 text-gray-600">
-                      {new Date(user.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="py-2 pr-4">
-                      {user.role === 'student' ? (
-                        <button
-                          onClick={() => handleDeleteStudent(user)}
-                          className="text-xs bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 disabled:opacity-60"
-                          disabled={deletingUserId === user._id}
-                        >
-                          {deletingUserId === user._id ? 'Deleting...' : 'Delete Permanently'}
-                        </button>
-                      ) : (
-                        <span className="text-xs text-gray-400">Not allowed</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-4">
+            {users.map((user) => (
+              <div key={user._id} className="border-l-[4px] border-[#FF0080] bg-gray-50 hover:bg-white transition-colors p-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  {/* User Info */}
+                  <div className="flex-1">
+                    <h3 className="font-black text-lg uppercase tracking-wide text-black mb-1">
+                      {user.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">{user.email}</p>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Joined: {new Date(user.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+
+                  {/* Role & Action */}
+                  <div className="flex items-center gap-4">
+                    <span className={`px-4 py-2 font-black text-xs uppercase border-[2px] border-black ${
+                      user.role === 'admin' 
+                        ? 'bg-[#A000FF] text-white' 
+                        : 'bg-[#00FFD1] text-black'
+                    }`}>
+                      {user.role?.toUpperCase()}
+                    </span>
+
+                    {user.role === 'student' ? (
+                      <button
+                        onClick={() => handleDeleteStudent(user)}
+                        className="px-6 py-2 bg-[#FF0080] text-white font-black border-[3px] border-black uppercase tracking-wide text-xs shadow-[4px_4px_0px] hover:translate-x-[2px] hover:translate-y-[2px] disabled:opacity-50 transition-all duration-100"
+                        disabled={deletingUserId === user._id}
+                      >
+                        {deletingUserId === user._id ? '⏳ DELETING' : '🗑️ DELETE'}
+                      </button>
+                    ) : (
+                      <span className="px-6 py-2 bg-gray-300 text-gray-600 font-black border-[3px] border-black uppercase tracking-wide text-xs cursor-not-allowed">
+                        PROTECTED
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
-      </Card>
+      </div>
     </MainLayout>
   );
 }
