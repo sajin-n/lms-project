@@ -1,67 +1,136 @@
 @import "tailwindcss";
 
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 :root {
-  --nb-primary: #FF6B6B;
-  --nb-secondary: #4ECDC4;
-  --nb-accent: #FFE66D;
-  --nb-dark: #1A1A2E;
-  --nb-light: #F7FFF7;
-  --nb-purple: #6C5CE7;
-  --nb-orange: #FF9F43;
-  --nb-pink: #FD79A8;
-  --nb-border-width: 3px;
-  --nb-shadow: 4px 4px 0px;
-  --nb-shadow-lg: 6px 6px 0px;
-  --nb-radius: 12px;
+  --nb-primary: #FF0080;
+  --nb-secondary: #00FFD1;
+  --nb-accent: #FFFF00;
+  --nb-dark: #000000;
+  --nb-light: #FFFFFF;
+  --nb-purple: #A000FF;
+  --nb-orange: #FF6B00;
+  --nb-pink: #FF1493;
+  --nb-cyan: #00FFFF;
+  --nb-lime: #00FF41;
+  --nb-border-width: 4px;
+  --nb-shadow: 8px 8px 0px;
+  --nb-shadow-lg: 12px 12px 0px;
+  --nb-radius: 0px;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Outfit', 'Space Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--nb-light);
   color: var(--nb-dark);
-  line-height: 1.6;
+  line-height: 1.5;
+  background-image: 
+    linear-gradient(rgba(255, 0, 128, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 128, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+::selection {
+  background-color: var(--nb-primary);
+  color: var(--nb-light);
 }
 
 @layer utilities {
   .nb-btn-primary {
-    @apply px-6 py-3 bg-[var(--nb-primary)] text-white font-bold text-base border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px] hover:shadow-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150;
+    @apply px-8 py-4 bg-[var(--nb-primary)] text-white font-black text-lg border-[var(--nb-border-width)] border-black uppercase tracking-wider shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .nb-btn-secondary {
-    @apply px-6 py-3 bg-[var(--nb-secondary)] text-white font-bold text-base border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px] hover:shadow-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150;
+    @apply px-8 py-4 bg-[var(--nb-secondary)] text-black font-black text-lg border-[var(--nb-border-width)] border-black uppercase tracking-wider shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .nb-btn-accent {
-    @apply px-6 py-3 bg-[var(--nb-accent)] text-black font-bold text-base border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px] hover:shadow-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150;
+    @apply px-8 py-4 bg-[var(--nb-accent)] text-black font-black text-lg border-[var(--nb-border-width)] border-black uppercase tracking-wider shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .nb-btn-dark {
+    @apply px-8 py-4 bg-black text-white font-black text-lg border-[var(--nb-border-width)] border-black uppercase tracking-wider shadow-[var(--nb-shadow)] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .nb-card {
-    @apply bg-white border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] shadow-[var(--nb-shadow)] shadow-black p-6;
+    @apply bg-white border-[var(--nb-border-width)] border-black shadow-[var(--nb-shadow)] shadow-black p-8 transform hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[var(--nb-shadow-lg)] transition-all duration-150;
+  }
+
+  .nb-card-dark {
+    @apply bg-black text-white border-[var(--nb-border-width)] border-white shadow-[var(--nb-shadow)] shadow-white p-8;
   }
 
   .nb-input {
-    @apply w-full px-4 py-3 text-black bg-white border-[var(--nb-border-width)] border-black rounded-[var(--nb-radius)] font-medium placeholder:text-gray-500 focus:outline-none focus:ring-4 focus:ring-[var(--nb-secondary)] focus:border-black transition-all duration-150;
+    @apply w-full px-6 py-4 text-black bg-white border-[var(--nb-border-width)] border-black font-semibold placeholder:text-gray-400 placeholder:font-medium focus:outline-none focus:ring-0 focus:border-[var(--nb-primary)] transition-all duration-150 uppercase tracking-wide;
+  }
+
+  .nb-input-dark {
+    @apply w-full px-6 py-4 text-white bg-black border-[var(--nb-border-width)] border-white font-semibold placeholder:text-gray-600 focus:outline-none focus:border-[var(--nb-secondary)];
   }
 
   .nb-heading {
-    @apply text-3xl md:text-4xl font-black text-black tracking-tight;
+    @apply text-5xl md:text-7xl font-black text-black uppercase tracking-tighter leading-none;
+  }
+
+  .nb-heading-light {
+    @apply text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none;
   }
 
   .nb-subheading {
-    @apply text-xl md:text-2xl font-bold text-black;
+    @apply text-2xl md:text-4xl font-black text-black uppercase tracking-wide;
   }
 
-  .nb-bg-pattern {
+  .nb-subheading-light {
+    @apply text-2xl md:text-4xl font-black text-white uppercase tracking-wide;
+  }
+
+  .nb-grid-bg {
     background-image: 
-      linear-gradient(45deg, var(--nb-secondary) 25%, transparent 25%),
-      linear-gradient(-45deg, var(--nb-secondary) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, var(--nb-secondary) 75%),
-      linear-gradient(-45deg, transparent 75%, var(--nb-secondary) 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      linear-gradient(0deg, transparent calc(100% - 1px), #000 calc(100% - 1px)),
+      linear-gradient(90deg, transparent calc(100% - 1px), #000 calc(100% - 1px));
+    background-size: 40px 40px;
+  }
+
+  .nb-gradient-primary {
+    background: linear-gradient(135deg, var(--nb-primary) 0%, var(--nb-pink) 100%);
+  }
+
+  .nb-gradient-neon {
+    background: linear-gradient(135deg, var(--nb-secondary) 0%, var(--nb-purple) 50%, var(--nb-primary) 100%);
+  }
+
+  .nb-text-gradient {
+    background: linear-gradient(135deg, var(--nb-primary) 0%, var(--nb-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nb-glow {
+    text-shadow: 0 0 10px rgba(255, 0, 128, 0.5), 0 0 20px rgba(0, 255, 209, 0.3);
+  }
+
+  .nb-glow-neon {
+    box-shadow: 0 0 20px rgba(255, 0, 128, 0.5), 0 0 40px rgba(0, 255, 209, 0.3), 8px 8px 0px rgba(0, 0, 0, 0.3);
+  }
+
+  .nb-divider {
+    @apply border-[3px] border-black my-8;
+  }
+
+  .nb-section {
+    @apply py-16 md:py-24 px-4 md:px-8;
+  }
+
+  .nb-container {
+    @apply max-w-7xl mx-auto;
   }
 }
