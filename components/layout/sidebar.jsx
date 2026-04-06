@@ -31,45 +31,60 @@ const Sidebar = ({ role, children }) => {
 
   const itemClass = (href, tone) => {
     const active = pathname === href;
+    const baseStyle = 'font-black text-sm uppercase tracking-wider px-4 py-3 border-l-[4px] transition-all duration-150';
 
     if (tone === 'admin') {
       return active
-        ? 'font-semibold bg-blue-100 text-blue-800 px-3 py-2 rounded-md'
-        : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 rounded-md transition-colors';
+        ? `${baseStyle} border-[#A000FF] bg-[#F0ECFF] text-[#A000FF]`
+        : `${baseStyle} border-transparent text-black hover:border-[#A000FF] hover:bg-gray-50`;
     }
 
     return active
-      ? 'font-semibold bg-green-100 text-green-800 px-3 py-2 rounded-md'
-      : 'text-green-600 hover:text-green-800 hover:bg-green-50 px-3 py-2 rounded-md transition-colors';
+      ? `${baseStyle} border-[#00FFD1] bg-[#E0FFFC] text-[#00FFD1]`
+      : `${baseStyle} border-transparent text-black hover:border-[#00FFD1] hover:bg-gray-50`;
   };
 
   let links;
   if (role === 'admin') {
     links = (
       <>
-        <Link href="/admin_dashboard" className={itemClass('/admin_dashboard', 'admin')}>Admin Dashboard</Link>
-        <Link href="/edit_lesson" className={itemClass('/edit_lesson', 'admin')}>Edit Lessons</Link>
-        <Link href="/manage_students" className={itemClass('/manage_students', 'admin')}>Manage Users</Link>
+        <Link href="/admin_dashboard" className={itemClass('/admin_dashboard', 'admin')}>
+          ⚙️ DASHBOARD
+        </Link>
+        <Link href="/edit_lesson" className={itemClass('/edit_lesson', 'admin')}>
+          📚 MANAGE COURSES
+        </Link>
+        <Link href="/manage_students" className={itemClass('/manage_students', 'admin')}>
+          👥 MANAGE USERS
+        </Link>
         <button
           onClick={handleLogout}
-          className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 rounded-md text-left transition-colors"
+          className="font-black text-sm uppercase tracking-wider px-4 py-3 border-l-[4px] border-[#FF0080] text-[#FF0080] hover:bg-[#FFE6F0] w-full text-left transition-all duration-150"
         >
-          Logout
+          🚪 LOGOUT
         </button>
       </>
     );
   } else if (role === 'student') {
     links = (
       <>
-        <Link href="/student_dashboard" className={itemClass('/student_dashboard', 'student')}>Student Dashboard</Link>
-        <Link href="/courses" className={itemClass('/courses', 'student')}>My Courses</Link>
-        <Link href="/grades" className={itemClass('/grades', 'student')}>Grades</Link>
-        <Link href="/profile" className={itemClass('/profile', 'student')}>Profile</Link>
+        <Link href="/student_dashboard" className={itemClass('/student_dashboard', 'student')}>
+          📊 DASHBOARD
+        </Link>
+        <Link href="/courses" className={itemClass('/courses', 'student')}>
+          🎓 MY COURSES
+        </Link>
+        <Link href="/grades" className={itemClass('/grades', 'student')}>
+          📈 GRADES
+        </Link>
+        <Link href="/profile" className={itemClass('/profile', 'student')}>
+          👤 PROFILE
+        </Link>
         <button
           onClick={handleLogout}
-          className="text-green-600 hover:text-green-800 hover:bg-green-50 px-3 py-2 rounded-md text-left transition-colors"
+          className="font-black text-sm uppercase tracking-wider px-4 py-3 border-l-[4px] border-[#FF0080] text-[#FF0080] hover:bg-[#FFE6F0] w-full text-left transition-all duration-150"
         >
-          Logout
+          🚪 LOGOUT
         </button>
       </>
     );
@@ -80,8 +95,8 @@ const Sidebar = ({ role, children }) => {
   if (!links) return null;
 
   return (
-    <aside className="w-64 bg-gray-100 h-full p-4 hidden md:block border-r">
-      <nav className="flex flex-col gap-4">
+    <aside className="w-64 bg-white h-full p-6 hidden md:block border-r-[4px] border-black">
+      <nav className="flex flex-col gap-2">
         {links}
       </nav>
       {children}
