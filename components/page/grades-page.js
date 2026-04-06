@@ -57,40 +57,81 @@ export default function GradesPage() {
   return (
     <MainLayout sidebar={<Sidebar role="student" />} navbar={<Navbar />}>
       <SessionExpiredModal isOpen={showExpiredModal} />
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-black">Grades & Progress</h1>
-        <button
-          onClick={fetchGrades}
-          className="text-sm bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-        >
-          Refresh
-        </button>
+      
+      {/* Header Section */}
+      <div className="mb-12 border-[4px] border-black bg-[#00FFD1] text-black p-12">
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="nb-heading text-5xl md:text-6xl mb-2">YOUR</h1>
+            <p className="text-2xl md:text-3xl font-bold uppercase tracking-wider">GRADES</p>
+          </div>
+          <button
+            onClick={fetchGrades}
+            className="px-6 py-3 bg-black text-white font-black border-[3px] border-black uppercase tracking-wide shadow-[6px_6px_0px] shadow-black hover:translate-x-[3px] hover:translate-y-[3px] active:shadow-none transition-all duration-100"
+          >
+            ⚡ REFRESH
+          </button>
+        </div>
       </div>
 
-      <Card className="mb-6">
-        <p className="text-sm text-gray-500">Average Progress</p>
-        <p className="text-2xl font-bold text-gray-900 mt-2">{averageProgress}%</p>
-      </Card>
+      {/* Average Progress Card */}
+      <div className="border-[4px] border-black bg-[#FFFF00] text-black p-12 shadow-[8px_8px_0px] shadow-black mb-12">
+        <p className="font-black text-sm uppercase tracking-widest mb-4 text-gray-700">OVERALL PROGRESS</p>
+        <p className="text-7xl font-black">{averageProgress}%</p>
+      </div>
 
-      <Card>
+      {/* Enrollments List */}
+      <div className="border-[4px] border-black bg-white shadow-[8px_8px_0px] shadow-black p-8">
+        <h2 className="nb-subheading text-3xl md:text-4xl mb-8">COURSES</h2>
+        
         {isLoading ? (
-          <p className="text-gray-600">Loading grades...</p>
+          <div className="flex items-center justify-center h-32">
+            <svg className="animate-spin h-10 w-10 text-black" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
         ) : enrollments.length === 0 ? (
-          <p className="text-gray-600">No grade data yet. Enroll in a course first.</p>
+          <div className="border-[3px] border-dashed border-gray-300 p-8 text-center">
+            <p className="font-black text-lg uppercase tracking-wider text-gray-500">NO GRADES YET</p>
+            <p className="text-sm text-gray-400 mt-2">Enroll in a course to see your progress</p>
+          </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {enrollments.map((enrollment) => (
-              <div key={enrollment._id} className="border border-gray-200 rounded-md p-3">
-                <p className="font-semibold text-gray-900">{enrollment.course?.title}</p>
-                <p className="text-sm text-gray-600 mt-1">
-                  Progress: {enrollment.progress}% · Status: {enrollment.status}
-                </p>
-                <p className="text-sm text-gray-600">Grade: {enrollment.grade}</p>
+              <div key={enrollment._id} className="border-l-[4px] border-[#FF0080] bg-gray-50 hover:bg-white transition-colors p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="font-black text-lg uppercase tracking-wide text-black">
+                    {enrollment.course?.title}
+                  </h3>
+                  <span className="px-4 py-2 bg-[#A000FF] text-white font-black text-xs uppercase border-[2px] border-black">
+                    {enrollment.status?.toUpperCase() || 'ACTIVE'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <p className="font-black text-xs uppercase tracking-widest text-gray-600 mb-2">PROGRESS</p>
+                    <p className="text-4xl font-black text-[#FF0080]">{enrollment.progress}%</p>
+                    <div className="w-full bg-gray-200 border-[2px] border-black h-2 mt-2">
+                      <div 
+                        className="bg-[#FF0080] h-full"
+                        style={{ width: `${enrollment.progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-black text-xs uppercase tracking-widest text-gray-600 mb-2">GRADE</p>
+                    <p className="text-4xl font-black text-[#00FFD1]">
+                      {enrollment.grade || '—'}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         )}
-      </Card>
+      </div>
     </MainLayout>
   );
 }
