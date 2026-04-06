@@ -6,10 +6,12 @@ import MainLayout from '../layout/main-layout';
 import Sidebar from '../layout/sidebar';
 import Navbar from '../layout/navbar';
 import Card from '../global/card';
+import SessionExpiredModal from '../global/session-expired-modal';
 
 export default function ProfilePage() {
   const { data: session } = useSession();
   const [stats, setStats] = useState(null);
+  const [showExpiredModal, setShowExpiredModal] = useState(false);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -18,6 +20,10 @@ export default function ProfilePage() {
         const data = await response.json();
 
         if (!response.ok) {
+          if (response.status === 401) {
+            setShowExpiredModal(true);
+            return;
+          }
           throw new Error(data?.error || 'Failed to load profile data');
         }
 
@@ -30,8 +36,15 @@ export default function ProfilePage() {
     fetchStats();
   }, []);
 
+  useEffect(() => {
+    if (!session) {
+      setShowExpiredModal(true);
+    }
+  }, [session]);
+
   return (
     <MainLayout sidebar={<Sidebar role="student" />} navbar={<Navbar />}>
+      <SessionExpiredModal isOpen={showExpiredModal} />
       <h1 className="text-3xl font-bold text-black mb-6">My Profile</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
