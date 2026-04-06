@@ -52,75 +52,122 @@ const StudentDashboardPage = () => {
     if (!stats) return [];
 
     return [
-      { label: 'Available Courses', value: stats.totalCourses },
-      { label: 'Enrolled Courses', value: stats.enrolledCourses },
-      { label: 'Completed Courses', value: stats.completedCourses },
-      { label: 'Average Progress', value: `${stats.averageProgress}%` },
+      { label: 'AVAILABLE', value: stats.totalCourses, icon: '📚', color: 'bg-[#FF0080]' },
+      { label: 'ENROLLED', value: stats.enrolledCourses, icon: '✓', color: 'bg-[#00FFD1]' },
+      { label: 'COMPLETED', value: stats.completedCourses, icon: '🏆', color: 'bg-[#FFFF00]' },
+      { label: 'PROGRESS', value: `${stats.averageProgress}%`, icon: '📊', color: 'bg-[#A000FF]' },
     ];
   }, [data]);
 
   return (
     <MainLayout sidebar={<Sidebar role="student" />} navbar={<Navbar />}>
       <SessionExpiredModal isOpen={showExpiredModal} />
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-black">
-          Welcome, {session?.user?.name || 'Student'}
-        </h1>
-        <button
-          onClick={fetchDashboard}
-          className="text-sm bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
-        >
-          Refresh
-        </button>
+      
+      {/* Hero Section */}
+      <div className="mb-12 border-[4px] border-black bg-gradient-to-r from-[#000000] to-[#1a1a1a] text-white p-12">
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="nb-heading-light text-5xl md:text-7xl mb-4">HEY,</h1>
+            <p className="text-2xl md:text-3xl font-bold uppercase tracking-wider mb-2">
+              {session?.user?.name?.toUpperCase() || 'STUDENT'}
+            </p>
+            <div className="w-32 h-1 bg-[#FF0080] mb-2"></div>
+            <p className="text-lg font-bold uppercase tracking-wider text-gray-300">WELCOME BACK TO YOUR DASHBOARD</p>
+          </div>
+          <button
+            onClick={fetchDashboard}
+            className="px-6 py-3 bg-[#FF0080] text-white font-black border-[3px] border-white uppercase tracking-wide shadow-[6px_6px_0px] shadow-white hover:translate-x-[3px] hover:translate-y-[3px] active:shadow-none transition-all duration-100"
+          >
+            ↻ REFRESH
+          </button>
+        </div>
       </div>
 
       {isLoading ? (
-        <p className="text-gray-600">Loading dashboard...</p>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="inline-block">
+              <svg className="animate-spin h-12 w-12 text-black mb-4" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+            <p className="font-black text-lg uppercase tracking-wider">LOADING DATA...</p>
+          </div>
+        </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {cards.map((item) => (
-              <Card key={item.label}>
-                <p className="text-sm text-gray-500">{item.label}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-2">{item.value}</p>
-              </Card>
+              <div key={item.label} className={`border-[4px] border-black ${item.color} text-black p-8 shadow-[8px_8px_0px] shadow-black hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[12px_12px_0px] transition-all duration-150`}>
+                <div className="text-4xl mb-4">{item.icon}</div>
+                <p className="font-black text-sm uppercase tracking-widest mb-3 text-gray-700">{item.label}</p>
+                <p className="text-5xl md:text-6xl font-black leading-none">{item.value}</p>
+              </div>
             ))}
           </div>
 
-          <Card className="mb-6">
-            <h2 className="text-xl font-semibold text-black mb-3">Recent Enrollments</h2>
-            <ul className="space-y-2">
+          {/* Recent Enrollments */}
+          <div className="border-[4px] border-black bg-white p-8 shadow-[8px_8px_0px] shadow-black mb-12">
+            <h2 className="nb-subheading text-3xl md:text-4xl mb-8">RECENT</h2>
+            <div className="mb-8">
+              <div className="w-full h-1 bg-black mb-8"></div>
+              
               {data?.enrollments?.length ? (
-                data.enrollments.slice(0, 5).map((enrollment) => (
-                  <li key={enrollment._id} className="text-sm text-gray-700">
-                    <span className="font-medium">{enrollment.course?.title}</span> ·{' '}
-                    {enrollment.progress}% progress · {enrollment.status}
-                  </li>
-                ))
+                <div className="space-y-4">
+                  {data.enrollments.slice(0, 5).map((enrollment, idx) => (
+                    <div key={enrollment._id} className="border-l-[4px] border-[#FF0080] pl-6 py-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="font-black text-lg uppercase tracking-wide text-black">
+                          {enrollment.course?.title}
+                        </h3>
+                        <span className="px-4 py-1 bg-[#00FFD1] text-black font-black text-xs uppercase border-[2px] border-black">
+                          {enrollment.status?.toUpperCase() || 'ACTIVE'}
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 border-[2px] border-black h-4">
+                        <div 
+                          className="bg-[#FF0080] border-r-[2px] border-black h-full transition-all duration-300"
+                          style={{ width: `${enrollment.progress}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-xs font-bold uppercase tracking-wider mt-2 text-gray-600">
+                        {enrollment.progress}% COMPLETE
+                      </p>
+                    </div>
+                  ))}
+                </div>
               ) : (
-                <li className="text-sm text-gray-500">No enrollments yet. Start with a course!</li>
+                <div className="border-[3px] border-dashed border-gray-300 p-8 text-center">
+                  <p className="font-black text-lg uppercase tracking-wider text-gray-500">
+                    NO ENROLLMENTS YET
+                  </p>
+                  <p className="text-sm text-gray-400 mt-2">START YOUR LEARNING JOURNEY</p>
+                </div>
               )}
-            </ul>
-          </Card>
+            </div>
+          </div>
 
-          <div className="flex gap-3 flex-wrap">
+          {/* Action Buttons */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Link
               href="/courses"
-              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+              className="border-[4px] border-black bg-[#FF0080] text-white p-8 shadow-[8px_8px_0px] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:shadow-none transition-all duration-100 text-center font-black text-lg uppercase tracking-wider"
             >
-              Browse Courses
+              📚 EXPLORE COURSES
             </Link>
             <Link
               href="/grades"
-              className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition-colors"
+              className="border-[4px] border-black bg-[#00FFD1] text-black p-8 shadow-[8px_8px_0px] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:shadow-none transition-all duration-100 text-center font-black text-lg uppercase tracking-wider"
             >
-              View Grades
+              📊 VIEW GRADES
             </Link>
             <Link
               href="/profile"
-              className="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+              className="border-[4px] border-black bg-black text-white p-8 shadow-[8px_8px_0px] shadow-black hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px] active:shadow-none transition-all duration-100 text-center font-black text-lg uppercase tracking-wider"
             >
-              Profile
+              👤 YOUR PROFILE
             </Link>
           </div>
         </>
