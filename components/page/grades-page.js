@@ -1,14 +1,18 @@
 "use client";
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import MainLayout from '../layout/main-layout';
 import Sidebar from '../layout/sidebar';
 import Navbar from '../layout/navbar';
 import Card from '../global/card';
+import SessionExpiredModal from '../global/session-expired-modal';
 
 export default function GradesPage() {
+  const { data: session } = useSession();
   const [enrollments, setEnrollments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showExpiredModal, setShowExpiredModal] = useState(false);
 
   const fetchGrades = async () => {
     setIsLoading(true);
@@ -17,6 +21,10 @@ export default function GradesPage() {
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          setShowExpiredModal(true);
+          return;
+        }
         throw new Error(data?.error || 'Failed to fetch grades');
       }
 
@@ -32,6 +40,12 @@ export default function GradesPage() {
     fetchGrades();
   }, []);
 
+  useEffect(() => {
+    if (!session) {
+      setShowExpiredModal(true);
+    }
+  }, [session]);
+
   const averageProgress = useMemo(() => {
     if (!enrollments.length) return 0;
     return Math.round(
@@ -42,6 +56,7 @@ export default function GradesPage() {
 
   return (
     <MainLayout sidebar={<Sidebar role="student" />} navbar={<Navbar />}>
+      <SessionExpiredModal isOpen={showExpiredModal} />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-black">Grades & Progress</h1>
         <button
