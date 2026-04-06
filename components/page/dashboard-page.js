@@ -1,15 +1,19 @@
 "use client"
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import MainLayout from '../layout/main-layout';
 import Sidebar from '../layout/sidebar';
 import Navbar from '../layout/navbar';
 import Card from '../global/card';
+import SessionExpiredModal from '../global/session-expired-modal';
 
 const DashboardPage = () => {
+  const { data: session } = useSession();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showExpiredModal, setShowExpiredModal] = useState(false);
 
   const fetchDashboard = async () => {
     setIsLoading(true);
@@ -18,6 +22,10 @@ const DashboardPage = () => {
       const payload = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          setShowExpiredModal(true);
+          return;
+        }
         throw new Error(payload?.error || 'Failed to load admin dashboard');
       }
 
@@ -32,6 +40,12 @@ const DashboardPage = () => {
   useEffect(() => {
     fetchDashboard();
   }, []);
+
+  useEffect(() => {
+    if (!session) {
+      setShowExpiredModal(true);
+    }
+  }, [session]);
 
   const statCards = useMemo(() => {
     const stats = data?.stats;
@@ -49,6 +63,7 @@ const DashboardPage = () => {
 
   return (
     <MainLayout sidebar={<Sidebar role="admin" />} navbar={<Navbar />}>
+      <SessionExpiredModal isOpen={showExpiredModal} onClose={() => setShowExpiredModal(false)} />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-black">Admin Dashboard</h1>
         <button
