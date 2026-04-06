@@ -45,34 +45,63 @@ export default function ProfilePage() {
   return (
     <MainLayout sidebar={<Sidebar role="student" />} navbar={<Navbar />}>
       <SessionExpiredModal isOpen={showExpiredModal} />
-      <h1 className="text-3xl font-bold text-black mb-6">My Profile</h1>
+      
+      {/* Header Section */}
+      <div className="mb-12 border-[4px] border-black bg-[#A000FF] text-white p-12">
+        <h1 className="nb-heading-light text-5xl md:text-6xl mb-2">YOUR</h1>
+        <p className="text-2xl md:text-3xl font-bold uppercase tracking-wider">PROFILE</p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <h2 className="text-xl font-semibold text-black mb-4">Account Details</h2>
-          <p className="text-sm text-gray-700 mb-2">
-            <span className="font-medium">Name:</span> {session?.user?.name || '-'}
-          </p>
-          <p className="text-sm text-gray-700 mb-2">
-            <span className="font-medium">Email:</span> {session?.user?.email || '-'}
-          </p>
-          <p className="text-sm text-gray-700">
-            <span className="font-medium">Role:</span> {session?.user?.role || '-'}
-          </p>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Account Details */}
+        <div className="border-[4px] border-black bg-white shadow-[8px_8px_0px] shadow-black hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[12px_12px_0px] transition-all duration-150 p-8">
+          <h2 className="nb-subheading text-2xl md:text-3xl mb-8">ACCOUNT</h2>
+          <div className="space-y-6 border-t-[4px] border-black pt-8">
+            <div>
+              <p className="font-black text-xs uppercase tracking-widest text-gray-600 mb-2">NAME</p>
+              <p className="text-2xl font-black text-black">{session?.user?.name || '—'}</p>
+            </div>
+            <div>
+              <p className="font-black text-xs uppercase tracking-widest text-gray-600 mb-2">EMAIL</p>
+              <p className="text-sm font-bold text-gray-800 break-all">{session?.user?.email || '—'}</p>
+            </div>
+            <div>
+              <p className="font-black text-xs uppercase tracking-widest text-gray-600 mb-2">ROLE</p>
+              <span className="px-4 py-2 bg-[#00FFD1] text-black font-black text-sm uppercase border-[2px] border-black inline-block">
+                {session?.user?.role || '—'}
+              </span>
+            </div>
+          </div>
+        </div>
 
-        <Card>
-          <h2 className="text-xl font-semibold text-black mb-4">Learning Snapshot</h2>
-          <p className="text-sm text-gray-700 mb-2">
-            <span className="font-medium">Enrolled Courses:</span> {stats?.enrolledCourses ?? 0}
-          </p>
-          <p className="text-sm text-gray-700 mb-2">
-            <span className="font-medium">Completed Courses:</span> {stats?.completedCourses ?? 0}
-          </p>
-          <p className="text-sm text-gray-700">
-            <span className="font-medium">Average Progress:</span> {stats?.averageProgress ?? 0}%
-          </p>
-        </Card>
+        {/* Learning Stats */}
+        <div className="border-[4px] border-black bg-white shadow-[8px_8px_0px] shadow-black hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[12px_12px_0px] transition-all duration-150 p-8">
+          <h2 className="nb-subheading text-2xl md:text-3xl mb-8">LEARNING</h2>
+          <div className="space-y-6 border-t-[4px] border-black pt-8">
+            <div>
+              <p className="font-black text-xs uppercase tracking-widest text-gray-600 mb-2">ENROLLED</p>
+              <p className="text-5xl font-black text-[#FF0080]">{stats?.enrolledCourses ?? 0}</p>
+              <p className="text-xs font-bold text-gray-500 mt-1">COURSES</p>
+            </div>
+            <div>
+              <p className="font-black text-xs uppercase tracking-widest text-gray-600 mb-2">COMPLETED</p>
+              <p className="text-5xl font-black text-[#00FFD1]">{stats?.completedCourses ?? 0}</p>
+              <p className="text-xs font-bold text-gray-500 mt-1">COURSES</p>
+            </div>
+            <div>
+              <p className="font-black text-xs uppercase tracking-widest text-gray-600 mb-2">PROGRESS</p>
+              <div className="flex items-baseline gap-2">
+                <p className="text-5xl font-black text-[#FFFF00]">{stats?.averageProgress ?? 0}%</p>
+                <div className="w-32 bg-gray-200 border-[2px] border-black h-3 flex-1">
+                  <div 
+                    className="bg-[#FFFF00] border-r-[2px] border-black h-full"
+                    style={{ width: `${stats?.averageProgress ?? 0}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </MainLayout>
   );
